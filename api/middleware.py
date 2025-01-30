@@ -5,5 +5,6 @@ class AuthMiddleware():
         self.get_response = get_response
     
     def __call__(self, request: HttpRequest):
+        request.authorized = False
         response = self.get_response(request)
         return response
