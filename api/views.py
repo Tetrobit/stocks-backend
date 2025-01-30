@@ -1,7 +1,7 @@
 """ Views """
 
 import json
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, JsonResponse, HttpResponse
 
 from .models import Person
 
@@ -21,7 +21,7 @@ def auth(request: HttpRequest):
         'vk_id': response['id'],
         'first_name': response['first_name'],
         'last_name': response['last_name'],
-        'photo': response['photo_200']
+        'photo': response['photo_200'],
     }
 
     person = Person.objects.filter(vk_id=response['id'])
@@ -31,7 +31,10 @@ def auth(request: HttpRequest):
     else:
         person = person.first()
 
-    response = JsonResponse({ 'ok': True, 'response': person_info })
+    response = JsonResponse({
+        'ok': True, 
+        'response': person_info,
+    })
 
     jwt = generateJwt({
         'id': person.id,
@@ -46,4 +49,20 @@ def auth(request: HttpRequest):
 
 def check_auth(request: HttpRequest):
     """ Check auth """
-    return JsonResponse({ 'ok': True, 'response': request.authorized })
+    if not request.authorized:
+        return JsonResponse({ 'ok': False })
+    
+    person = Person.objects.get(pk=request.user_id)
+    return JsonResponse({ 'ok': True, 'response': {
+        'id': person.id,
+        'first_name': person.first_name,
+        'last_name': person.last_name,
+        'photo': person.photo,
+        
+    }})
+
+def logout(_request: HttpRequest):
+    """ Logout user """
+    response = JsonResponse({ 'ok': True })
+    response.delete_cookie('access_token')
+    return response
