@@ -1,4 +1,7 @@
-from django.http import HttpResponse
+from django.http import HttpRequest, JsonResponse
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+def index(_request: HttpRequest):
+    return JsonResponse({ 'ok': True })
+
+def auth(_request: HttpRequest):
+    return JsonResponse({ 'ok': True })
