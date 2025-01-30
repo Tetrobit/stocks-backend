@@ -1,12 +1,12 @@
 """ Views """
 
 import json
-import requests
 from django.http import HttpRequest, JsonResponse
 
 from .models import Person
 
-from .vkapi import account_get_profile_info
+from .utils.jwt import generateJwt
+from .utils.vkapi import account_get_profile_info
 
 def index(_request: HttpRequest):
     """ Index endpoint """
@@ -31,7 +31,18 @@ def auth(request: HttpRequest):
     else:
         person = person.first()
 
-    return JsonResponse({ 'ok': True, 'response': person_info })
+    response = JsonResponse({ 'ok': True, 'response': person_info })
+
+    jwt = generateJwt({
+        'id': person.id,
+        'first_name': person.first_name,
+        'last_name': person.last_name,
+        'photo': person.photo,
+    })
+
+    response.set_cookie('access_token', jwt)
+
+    return response
 
 def check_auth(request: HttpRequest):
     """ Check auth """
