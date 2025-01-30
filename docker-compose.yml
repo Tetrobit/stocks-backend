@@ -1,0 +1,7 @@
+services:
+  stocks-api:
+    build: .
+    volumes:
+      - ".env:/app/.env"
+    ports:
+      - "8000:8000"
