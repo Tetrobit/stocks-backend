@@ -1,6 +1,7 @@
 """ Views """
 
 import json
+from django.conf import settings
 from django.http import HttpRequest, JsonResponse, HttpResponse
 
 from .models import Person
@@ -45,7 +46,10 @@ def auth(request: HttpRequest):
         'photo': person.photo,
     })
 
-    response.set_cookie('access_token', jwt)
+    if settings.DEBUG:
+        response.set_cookie('access_token', jwt)
+    else:
+        response.set_cookie('access_token', jwt, samesite='none', secure=True)
 
     return response
 

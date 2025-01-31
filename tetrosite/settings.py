@@ -17,28 +17,22 @@ from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 load_dotenv(BASE_DIR / '.env')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pzzyqifxvg^wf^($kqin_6(!7%yo9t=^#reh(3uekd=2qmiz1w'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG'].lower() == 'true'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
-    # "http://localhost:3000",
+    "https://dev.bro-js.ru",
 ]
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    '89.104.70.216',
 ]
 
 # Application definition
