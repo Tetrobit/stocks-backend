@@ -6,7 +6,7 @@ from django.http import HttpRequest, JsonResponse, HttpResponse
 from .models import Person
 
 from .utils.jwt import generateJwt
-from .utils.vkapi import account_get_profile_info
+from .utils.vkapi import account_get_profile_info, get_access_token
 
 def index(_request: HttpRequest):
     """ Index endpoint """
@@ -14,9 +14,11 @@ def index(_request: HttpRequest):
 
 def auth(request: HttpRequest):
     """ Auth user via VK """
-    # requests.post()
+
     data = json.loads(request.body)
-    response = account_get_profile_info(data['access_token'])['response']
+    access_token = get_access_token(data)
+    response = account_get_profile_info(access_token)['response']
+
     person_info = {
         'vk_id': response['id'],
         'first_name': response['first_name'],
