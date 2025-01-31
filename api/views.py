@@ -70,5 +70,8 @@ def check_auth(request: HttpRequest):
 def logout(_request: HttpRequest):
     """ Logout user """
     response = JsonResponse({ 'ok': True })
-    response.delete_cookie('access_token')
+    if settings.DEBUG:
+        response.set_cookie('access_token', None)
+    if settings.DEBUG:
+        response.set_cookie('access_token', '', samesite='none', secure=True)
     return response
