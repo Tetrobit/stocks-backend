@@ -3,5 +3,7 @@ services:
     build: .
     volumes:
       - ".env:/app/.env"
+      - "./tetrosite/settings.py:/app/tetrosite/settings.py"
+
     ports:
       - "8000:8000"
