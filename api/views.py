@@ -34,6 +34,8 @@ def auth(request: HttpRequest):
     else:
         person = person.first()
 
+    person_info['id'] = person.id
+
     response = JsonResponse({
         'ok': True, 
         'response': person_info,
@@ -64,7 +66,6 @@ def check_auth(request: HttpRequest):
         'first_name': person.first_name,
         'last_name': person.last_name,
         'photo': person.photo,
-        
     }})
 
 def logout(_request: HttpRequest):
