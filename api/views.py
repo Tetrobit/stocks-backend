@@ -72,6 +72,6 @@ def logout(_request: HttpRequest):
     response = JsonResponse({ 'ok': True })
     if settings.DEBUG:
         response.set_cookie('access_token', None)
-    if settings.DEBUG:
+    else:
         response.set_cookie('access_token', '', samesite='none', secure=True)
     return response
