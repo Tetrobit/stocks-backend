@@ -63,7 +63,11 @@ def check_auth(request: HttpRequest):
     if not request.authorized:
         return JsonResponse({ 'ok': False })
     
-    person = Person.objects.get(pk=request.user_id)
+    try:
+        person = Person.objects.get(pk=request.user_id)
+    except:
+        return JsonResponse({ 'ok': False })
+
     return JsonResponse({ 'ok': True, 'response': {
         'id': person.id,
         'first_name': person.first_name,
