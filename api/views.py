@@ -1,11 +1,14 @@
 """ Views """
 
 import json
+import re
+
 from django.conf import settings
 from django.http import HttpRequest, JsonResponse, HttpResponse
 
 from .models import Person
 
+from .utils.cbr import get_current_course, get_dynamic
 from .utils.jwt import generateJwt
 from .utils.vkapi import account_get_profile_info, get_access_token
 
@@ -76,3 +79,19 @@ def logout(_request: HttpRequest):
     else:
         response.set_cookie('access_token', '', samesite='none', secure=True)
     return response
+
+def daily_course(_request: HttpRequest):
+    """ Get course of the certain day """
+
+    return JsonResponse({ 'ok': True, 'response': get_current_course() })
+
+def dynamic_course(request: HttpRequest):
+    """ Get course of the certain day """
+    date_req1 = request.GET.get('date_req1')
+    date_req2 = request.GET.get('date_req2')
+    val_id = request.GET.get('val_id')
+
+    return JsonResponse({
+        'ok': True,
+        'response': get_dynamic(date_req1, date_req2, val_id)
+    })
